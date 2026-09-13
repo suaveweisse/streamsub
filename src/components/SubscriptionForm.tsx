@@ -19,6 +19,8 @@ const emptyForm: SubscriptionInput = {
   account_password: '',
 }
 
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFormProps) {
   const [form, setForm] = useState<SubscriptionInput>(initial ?? emptyForm)
   const [submitting, setSubmitting] = useState(false)
@@ -26,10 +28,21 @@ export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFo
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
-    setSubmitting(true)
     setError(null)
+
+    const email = form.account_email?.trim() ?? ''
+    if (email && !emailPattern.test(email)) {
+      setError('Please enter a valid account email address.')
+      return
+    }
+
+    setSubmitting(true)
     try {
-      await onSubmit(form)
+      await onSubmit({
+        ...form,
+        end_date: form.end_date || null,
+        account_email: email || null,
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
     } finally {
@@ -68,15 +81,20 @@ export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFo
           </Field>
 
           <Field label="Cost">
-            <input
-              required
-              type="number"
-              step="0.01"
-              min="0"
-              value={form.cost}
-              onChange={(e) => setForm({ ...form, cost: Number(e.target.value) })}
-              className={inputClass}
-            />
+            <div className="relative mt-1">
+              <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm text-slate-400">
+                $
+              </span>
+              <input
+                required
+                type="number"
+                step="0.01"
+                min="0"
+                value={form.cost}
+                onChange={(e) => setForm({ ...form, cost: Number(e.target.value) })}
+                className={`${inputClass} !mt-0 pl-6`}
+              />
+            </div>
           </Field>
 
           <Field label="Billing cycle">
