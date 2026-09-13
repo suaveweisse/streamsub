@@ -11,6 +11,13 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
+      workbox: {
+        // Take over immediately on a new deploy instead of leaving an old
+        // service worker (and its now-stale asset references) in control
+        // until every tab is closed and reopened.
+        skipWaiting: true,
+        clientsClaim: true,
+      },
       manifest: {
         name: 'STREAMsub',
         short_name: 'STREAMsub',
