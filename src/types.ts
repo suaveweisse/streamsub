@@ -11,7 +11,6 @@ export interface Subscription {
   account_email: string | null
   account_username: string | null
   account_password: string | null
-  notes: string | null
   created_by: string | null
   created_at: string
   updated_at: string
@@ -21,3 +20,13 @@ export type SubscriptionInput = Omit<
   Subscription,
   'id' | 'created_by' | 'created_at' | 'updated_at'
 >
+
+export interface SubscriptionComment {
+  id: string
+  subscription_id: string
+  author_id: string | null
+  author_email: string | null
+  body: string
+  created_at: string
+  updated_at: string
+}

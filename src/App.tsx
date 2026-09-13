@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from './lib/useAuth'
 import { useSubscriptions } from './lib/useSubscriptions'
+import { useComments } from './lib/useComments'
 import { LoginScreen } from './components/LoginScreen'
 import { SubscriptionList } from './components/SubscriptionList'
 import { SubscriptionForm } from './components/SubscriptionForm'
@@ -10,6 +11,7 @@ function App() {
   const { session, loading: authLoading, signInWithGoogle, signOut } = useAuth()
   const { subscriptions, loading, error, addSubscription, updateSubscription, deleteSubscription } =
     useSubscriptions()
+  const { comments, addComment, updateComment, deleteComment } = useComments()
   const [editing, setEditing] = useState<Subscription | 'new' | null>(null)
 
   if (authLoading) return null
@@ -51,10 +53,14 @@ function App() {
         ) : (
           <SubscriptionList
             subscriptions={subscriptions}
+            comments={comments}
             onEdit={(sub) => setEditing(sub)}
             onDelete={(id) => {
               if (confirm('Delete this subscription?')) deleteSubscription(id)
             }}
+            onAddComment={addComment}
+            onUpdateComment={updateComment}
+            onDeleteComment={deleteComment}
           />
         )}
       </main>

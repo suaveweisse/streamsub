@@ -1,11 +1,16 @@
 import { useState } from 'react'
 import { getStatus } from '../lib/billing'
-import type { Subscription } from '../types'
+import { CommentThread } from './CommentThread'
+import type { Subscription, SubscriptionComment } from '../types'
 
 interface SubscriptionListProps {
   subscriptions: Subscription[]
+  comments: SubscriptionComment[]
   onEdit: (subscription: Subscription) => void
   onDelete: (id: string) => void
+  onAddComment: (subscriptionId: string, body: string) => Promise<void>
+  onUpdateComment: (id: string, body: string) => Promise<void>
+  onDeleteComment: (id: string) => Promise<void>
 }
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
@@ -23,7 +28,15 @@ const statusClass = {
   ended: 'text-slate-400',
 } as const
 
-export function SubscriptionList({ subscriptions, onEdit, onDelete }: SubscriptionListProps) {
+export function SubscriptionList({
+  subscriptions,
+  comments,
+  onEdit,
+  onDelete,
+  onAddComment,
+  onUpdateComment,
+  onDeleteComment,
+}: SubscriptionListProps) {
   if (subscriptions.length === 0) {
     return <p className="mt-10 text-center text-sm text-slate-500">No subscriptions yet. Add your first one.</p>
   }
@@ -31,11 +44,18 @@ export function SubscriptionList({ subscriptions, onEdit, onDelete }: Subscripti
   const ended = subscriptions.filter((sub) => getStatus(sub).kind === 'ended')
   const current = subscriptions.filter((sub) => getStatus(sub).kind !== 'ended')
 
+  const cardProps = { onEdit, onDelete, onAddComment, onUpdateComment, onDeleteComment }
+
   return (
     <div className="mt-6 space-y-8">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {current.map((sub) => (
-          <SubscriptionCard key={sub.id} subscription={sub} onEdit={onEdit} onDelete={onDelete} />
+          <SubscriptionCard
+            key={sub.id}
+            subscription={sub}
+            comments={comments.filter((c) => c.subscription_id === sub.id)}
+            {...cardProps}
+          />
         ))}
       </div>
 
@@ -46,7 +66,12 @@ export function SubscriptionList({ subscriptions, onEdit, onDelete }: Subscripti
           </summary>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {ended.map((sub) => (
-              <SubscriptionCard key={sub.id} subscription={sub} onEdit={onEdit} onDelete={onDelete} />
+              <SubscriptionCard
+                key={sub.id}
+                subscription={sub}
+                comments={comments.filter((c) => c.subscription_id === sub.id)}
+                {...cardProps}
+              />
             ))}
           </div>
         </details>
@@ -57,12 +82,20 @@ export function SubscriptionList({ subscriptions, onEdit, onDelete }: Subscripti
 
 function SubscriptionCard({
   subscription,
+  comments,
   onEdit,
   onDelete,
+  onAddComment,
+  onUpdateComment,
+  onDeleteComment,
 }: {
   subscription: Subscription
+  comments: SubscriptionComment[]
   onEdit: (subscription: Subscription) => void
   onDelete: (id: string) => void
+  onAddComment: (subscriptionId: string, body: string) => Promise<void>
+  onUpdateComment: (id: string, body: string) => Promise<void>
+  onDeleteComment: (id: string) => Promise<void>
 }) {
   const [revealPassword, setRevealPassword] = useState(false)
   const status = getStatus(subscription)
@@ -103,10 +136,6 @@ function SubscriptionCard({
         </Row>
       </dl>
 
-      {subscription.notes && (
-        <p className="mt-3 rounded-lg bg-slate-50 p-2 text-xs text-slate-500">{subscription.notes}</p>
-      )}
-
       <div className="mt-4 flex justify-end gap-3 border-t border-slate-100 pt-3">
         <button
           onClick={() => onEdit(subscription)}
@@ -121,6 +150,13 @@ function SubscriptionCard({
           Delete
         </button>
       </div>
+
+      <CommentThread
+        comments={comments}
+        onAdd={(body) => onAddComment(subscription.id, body)}
+        onUpdate={onUpdateComment}
+        onDelete={onDeleteComment}
+      />
     </div>
   )
 }

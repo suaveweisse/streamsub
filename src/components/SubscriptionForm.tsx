@@ -17,7 +17,6 @@ const emptyForm: SubscriptionInput = {
   account_email: '',
   account_username: '',
   account_password: '',
-  notes: '',
 }
 
 export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFormProps) {
@@ -139,16 +138,6 @@ export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFo
             <input
               value={form.account_password ?? ''}
               onChange={(e) => setForm({ ...form, account_password: e.target.value })}
-              className={inputClass}
-            />
-          </Field>
-
-          <Field label="Notes" className="col-span-2">
-            <textarea
-              rows={3}
-              value={form.notes ?? ''}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              placeholder="Cancelled 9/13, paid through 9/22. Resubscribe if the price drops."
               className={inputClass}
             />
           </Field>
