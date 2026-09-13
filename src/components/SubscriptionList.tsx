@@ -43,6 +43,8 @@ export function SubscriptionList({
   const current = subscriptions.filter((sub) => getStatus(sub).kind !== 'ended')
 
   const cardProps = { onEdit, onDelete, onAddComment, onUpdateComment, onDeleteComment }
+  const parentName = (sub: Subscription) =>
+    subscriptions.find((s) => s.id === sub.parent_subscription_id)?.service_name
 
   return (
     <div className="mt-6 space-y-8">
@@ -51,6 +53,7 @@ export function SubscriptionList({
           <SubscriptionCard
             key={sub.id}
             subscription={sub}
+            parentName={parentName(sub)}
             comments={comments.filter((c) => c.subscription_id === sub.id)}
             {...cardProps}
           />
@@ -67,6 +70,7 @@ export function SubscriptionList({
               <SubscriptionCard
                 key={sub.id}
                 subscription={sub}
+                parentName={parentName(sub)}
                 comments={comments.filter((c) => c.subscription_id === sub.id)}
                 {...cardProps}
               />
@@ -80,6 +84,7 @@ export function SubscriptionList({
 
 function SubscriptionCard({
   subscription,
+  parentName,
   comments,
   onEdit,
   onDelete,
@@ -88,6 +93,7 @@ function SubscriptionCard({
   onDeleteComment,
 }: {
   subscription: Subscription
+  parentName?: string
   comments: SubscriptionComment[]
   onEdit: (subscription: Subscription) => void
   onDelete: (id: string) => void
@@ -105,6 +111,7 @@ function SubscriptionCard({
         <div>
           <h3 className="font-semibold text-slate-900">{subscription.service_name}</h3>
           <p className="text-sm text-slate-500">{subscription.payment_source || 'No payment source set'}</p>
+          {parentName && <p className="mt-0.5 text-xs text-indigo-600">Bundled with: {parentName}</p>}
         </div>
         <div className="text-right">
           <p className="font-semibold text-slate-900">{currency.format(subscription.cost)}</p>

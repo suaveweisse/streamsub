@@ -11,6 +11,7 @@ export interface Subscription {
   account_email: string | null
   account_username: string | null
   account_password: string | null
+  parent_subscription_id: string | null
   created_by: string | null
   created_at: string
   updated_at: string

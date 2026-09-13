@@ -68,6 +68,7 @@ function App() {
       {editing && (
         <SubscriptionForm
           initial={editing === 'new' ? undefined : editing}
+          subscriptions={subscriptions}
           onCancel={() => setEditing(null)}
           onSubmit={async (input) => {
             if (editing === 'new') await addSubscription(input)

@@ -3,6 +3,7 @@ import type { BillingCycle, Subscription, SubscriptionInput } from '../types'
 
 interface SubscriptionFormProps {
   initial?: Subscription
+  subscriptions: Subscription[]
   onCancel: () => void
   onSubmit: (input: SubscriptionInput) => Promise<void>
 }
@@ -17,14 +18,21 @@ const emptyForm: SubscriptionInput = {
   account_email: '',
   account_username: '',
   account_password: '',
+  parent_subscription_id: null,
 }
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFormProps) {
+export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }: SubscriptionFormProps) {
   const [form, setForm] = useState<SubscriptionInput>(initial ?? emptyForm)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Only offer subscriptions that aren't themselves a child, and never the
+  // record being edited — keeps the parent/child relationship one level deep.
+  const parentOptions = subscriptions.filter(
+    (sub) => sub.parent_subscription_id === null && sub.id !== initial?.id,
+  )
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
@@ -42,6 +50,7 @@ export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFo
         ...form,
         end_date: form.end_date || null,
         account_email: email || null,
+        parent_subscription_id: form.parent_subscription_id || null,
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -78,6 +87,25 @@ export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFo
               placeholder="Dad's Visa"
               className={inputClass}
             />
+          </Field>
+
+          <Field label="Included via (optional)" className="col-span-2">
+            <select
+              value={form.parent_subscription_id ?? ''}
+              onChange={(e) => setForm({ ...form, parent_subscription_id: e.target.value || null })}
+              className={inputClass}
+            >
+              <option value="">None — independent subscription</option>
+              {parentOptions.map((sub) => (
+                <option key={sub.id} value={sub.id}>
+                  {sub.service_name}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs font-normal text-slate-400">
+              Use this when a subscription is bundled through another one you track, e.g. Netflix via a
+              T-Mobile plan.
+            </p>
           </Field>
 
           <Field label="Cost">
