@@ -7,10 +7,10 @@ export function parseDateOnly(value: string): Date {
 
 const weekdayFormat = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'UTC' })
 
-/** Formats a UTC-anchored date as "Wed, 09/08/2026" (day/month/year), independent of viewer timezone. */
+/** Formats a UTC-anchored date as "Wed, 08/09/2026" (month/day/year), independent of viewer timezone. */
 export function formatDate(date: Date): string {
   const pad = (n: number) => n.toString().padStart(2, '0')
-  return `${weekdayFormat.format(date)}, ${pad(date.getUTCDate())}/${pad(date.getUTCMonth() + 1)}/${date.getUTCFullYear()}`
+  return `${weekdayFormat.format(date)}, ${pad(date.getUTCMonth() + 1)}/${pad(date.getUTCDate())}/${date.getUTCFullYear()}`
 }
 
 function startOfUTCDay(date: Date): Date {
