@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { getStatus } from '../lib/billing'
+import { getStatus, formatDate, parseDateOnly } from '../lib/billing'
 import { CommentThread } from './CommentThread'
 import type { Subscription, SubscriptionComment } from '../types'
 
@@ -14,11 +14,9 @@ interface SubscriptionListProps {
 }
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
-const dateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 
-function formatDate(value: string | null) {
-  if (!value) return '—'
-  return dateFormat.format(new Date(`${value}T00:00:00`))
+function formatStartDate(value: string | null) {
+  return value ? formatDate(parseDateOnly(value)) : '—'
 }
 
 const statusLabel = { active: 'Renews', cancelled: 'Cancelled — ends', ended: 'Ended' } as const
@@ -115,9 +113,9 @@ function SubscriptionCard({
       </div>
 
       <dl className="mt-4 space-y-1 text-sm text-slate-600">
-        <Row label="Started">{formatDate(subscription.start_date)}</Row>
+        <Row label="Started">{formatStartDate(subscription.start_date)}</Row>
         <Row label={statusLabel[status.kind]}>
-          <span className={statusClass[status.kind]}>{dateFormat.format(status.date)}</span>
+          <span className={statusClass[status.kind]}>{formatDate(status.date)}</span>
         </Row>
         <Row label="Email">{subscription.account_email || '—'}</Row>
         <Row label="Username">{subscription.account_username || '—'}</Row>

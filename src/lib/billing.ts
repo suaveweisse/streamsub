@@ -1,8 +1,16 @@
 import type { BillingCycle } from '../types'
 
-function parseDateOnly(value: string): Date {
+export function parseDateOnly(value: string): Date {
   const [year, month, day] = value.split('-').map(Number)
   return new Date(Date.UTC(year, month - 1, day))
+}
+
+const weekdayFormat = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'UTC' })
+
+/** Formats a UTC-anchored date as "Wed, 09/08/2026" (day/month/year), independent of viewer timezone. */
+export function formatDate(date: Date): string {
+  const pad = (n: number) => n.toString().padStart(2, '0')
+  return `${weekdayFormat.format(date)}, ${pad(date.getUTCDate())}/${pad(date.getUTCMonth() + 1)}/${date.getUTCFullYear()}`
 }
 
 function startOfUTCDay(date: Date): Date {
