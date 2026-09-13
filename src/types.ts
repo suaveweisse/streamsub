@@ -1,4 +1,4 @@
-export type BillingCycle = 'monthly' | 'annual'
+export type BillingCycle = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
 
 export interface Subscription {
   id: string
@@ -7,10 +7,11 @@ export interface Subscription {
   cost: number
   billing_cycle: BillingCycle
   start_date: string | null
-  renewal_date: string | null
+  end_date: string | null
   account_email: string | null
   account_username: string | null
   account_password: string | null
+  notes: string | null
   created_by: string | null
   created_at: string
   updated_at: string

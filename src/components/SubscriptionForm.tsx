@@ -13,10 +13,11 @@ const emptyForm: SubscriptionInput = {
   cost: 0,
   billing_cycle: 'monthly',
   start_date: '',
-  renewal_date: '',
+  end_date: '',
   account_email: '',
   account_username: '',
   account_password: '',
+  notes: '',
 }
 
 export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFormProps) {
@@ -85,13 +86,17 @@ export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFo
               onChange={(e) => setForm({ ...form, billing_cycle: e.target.value as BillingCycle })}
               className={inputClass}
             >
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
-              <option value="annual">Annual</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="yearly">Yearly</option>
             </select>
           </Field>
 
           <Field label="Start date">
             <input
+              required
               type="date"
               value={form.start_date ?? ''}
               onChange={(e) => setForm({ ...form, start_date: e.target.value })}
@@ -99,13 +104,18 @@ export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFo
             />
           </Field>
 
-          <Field label="Renews on">
+          <Field label="End date (if cancelled)" className="col-span-2">
             <input
               type="date"
-              value={form.renewal_date ?? ''}
-              onChange={(e) => setForm({ ...form, renewal_date: e.target.value })}
+              value={form.end_date ?? ''}
+              onChange={(e) => setForm({ ...form, end_date: e.target.value })}
               className={inputClass}
             />
+            <p className="mt-1 text-xs font-normal text-slate-400">
+              Leave blank for an active subscription that keeps auto-renewing. Set this to the last day
+              it's paid through once you've cancelled — it'll show as active until then, then move to
+              ended.
+            </p>
           </Field>
 
           <Field label="Account email" className="col-span-2">
@@ -129,6 +139,16 @@ export function SubscriptionForm({ initial, onCancel, onSubmit }: SubscriptionFo
             <input
               value={form.account_password ?? ''}
               onChange={(e) => setForm({ ...form, account_password: e.target.value })}
+              className={inputClass}
+            />
+          </Field>
+
+          <Field label="Notes" className="col-span-2">
+            <textarea
+              rows={3}
+              value={form.notes ?? ''}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              placeholder="Cancelled 9/13, paid through 9/22. Resubscribe if the price drops."
               className={inputClass}
             />
           </Field>
