@@ -12,6 +12,14 @@ export function PlayIcon({ className }: { className?: string }) {
   )
 }
 
+export function PlayGlyph({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M6 4 L20 12 L6 20 Z" />
+    </svg>
+  )
+}
+
 export function ChevronIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">

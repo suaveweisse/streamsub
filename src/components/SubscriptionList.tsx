@@ -179,7 +179,7 @@ function SubscriptionCard({
             Bundled with: {parentName || 'placeholder'}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col items-end gap-1">
           <div className="text-right">
             <p className="font-semibold text-zinc-50">{currency.format(subscription.cost)}</p>
             <p className="text-xs uppercase tracking-wide text-zinc-500">{subscription.billing_cycle}</p>

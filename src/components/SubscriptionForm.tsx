@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { ChevronIcon } from './icons'
 import type { BillingCycle, Subscription, SubscriptionInput } from '../types'
 
 interface SubscriptionFormProps {
@@ -91,10 +92,9 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
           </Field>
 
           <Field label="Included via (optional)" className="col-span-2">
-            <select
+            <Select
               value={form.parent_subscription_id ?? ''}
               onChange={(e) => setForm({ ...form, parent_subscription_id: e.target.value || null })}
-              className={inputClass}
             >
               <option value="">None — independent subscription</option>
               {parentOptions.map((sub) => (
@@ -102,7 +102,7 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
                   {sub.service_name}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
 
           <Field label="Cost">
@@ -128,20 +128,19 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
           </Field>
 
           <Field label="Billing cycle">
-            <select
+            <Select
               value={form.billing_cycle}
               onChange={(e) => setForm({ ...form, billing_cycle: e.target.value as BillingCycle })}
-              className={inputClass}
             >
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
               <option value="quarterly">Quarterly</option>
               <option value="yearly">Yearly</option>
-            </select>
+            </Select>
           </Field>
 
-          <Field label="Start date">
+          <Field label="Start date" className="col-span-2">
             <input
               required
               type="date"
@@ -151,18 +150,17 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
             />
           </Field>
 
-          <Field label="End date">
+          <Field label="End date" className="col-span-2">
             <input
               type="date"
               value={form.end_date ?? ''}
               onChange={(e) => setForm({ ...form, end_date: e.target.value })}
               className={inputClass}
             />
+            <p className="mt-1 text-xs font-normal text-zinc-500">
+              Leave blank while active; set it to the last paid-through day once cancelled.
+            </p>
           </Field>
-
-          <p className="col-span-2 -mt-1 text-xs text-zinc-500">
-            Leave end date blank while active; set it to the last paid-through day once cancelled.
-          </p>
 
           <Field label="Account email" className="col-span-2">
             <input
@@ -230,5 +228,30 @@ function Field({
       {label}
       {children}
     </label>
+  )
+}
+
+// Native <select> chrome (arrow, reserved padding) renders slightly
+// narrower than a plain input at the same declared width in some browsers.
+// Stripping the native appearance and drawing our own chevron keeps every
+// field pixel-identical in width.
+function Select({
+  value,
+  onChange,
+  children,
+}: {
+  value: string
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  children: React.ReactNode
+}) {
+  return (
+    <div className="relative mt-1">
+      <select value={value} onChange={onChange} className={`${inputClass} !mt-0 appearance-none pr-8`}>
+        {children}
+      </select>
+      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+        <ChevronIcon className="h-4 w-4 rotate-90 text-zinc-500" />
+      </span>
+    </div>
   )
 }
