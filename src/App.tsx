@@ -63,7 +63,7 @@ function App() {
               <h1 className="text-xl font-bold tracking-tight">
                 STREAM<span className="text-zinc-400">sub</span>
               </h1>
-              <p className="truncate text-xs text-zinc-500">Streaming Subscription Management</p>
+              <p className="text-xs text-zinc-500">Streaming Subscription Management</p>
             </div>
           </div>
           <div className="shrink-0 text-right leading-tight">
@@ -81,7 +81,7 @@ function App() {
 
       <main className="mx-auto max-w-5xl px-4">
         <div className="mt-4 flex items-center justify-between">
-          <p className="text-base font-medium text-zinc-300">
+          <p className="pl-1 text-base font-medium text-zinc-300">
             {subscriptions.length} subscription{subscriptions.length === 1 ? '' : 's'} tracked
           </p>
           <button
@@ -92,7 +92,7 @@ function App() {
           </button>
         </div>
 
-        <div className="mt-2 flex items-center justify-between gap-2">
+        <div className="mt-3 flex items-center justify-between gap-2">
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
