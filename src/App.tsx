@@ -63,7 +63,11 @@ function App() {
               <h1 className="text-xl font-bold leading-none tracking-tight">
                 STREAM<span className="text-zinc-400">sub</span>
               </h1>
-              <p className="text-xs leading-none text-zinc-500">Streaming Subscription Management</p>
+              <p className="text-xs leading-none text-zinc-500">
+                Streaming Subscription
+                <br />
+                Management
+              </p>
             </div>
           </div>
           <div className="flex shrink-0 flex-col gap-0.5 text-right">
@@ -81,7 +85,7 @@ function App() {
 
       <main className="mx-auto max-w-5xl px-4">
         <div className="mt-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-zinc-100">Subscriptions ({subscriptions.length})</h2>
+          <h2 className="pl-2 text-xl font-semibold text-zinc-100">Subscriptions ({subscriptions.length})</h2>
           <button
             onClick={() => setEditing('new')}
             className="rounded-lg bg-gradient-to-r from-red-600 to-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:from-red-500 hover:to-orange-400"
