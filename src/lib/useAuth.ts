@@ -22,7 +22,14 @@ export function useAuth() {
   const signInWithGoogle = () =>
     supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin },
+      options: {
+        redirectTo: window.location.origin,
+        // Always show the account picker instead of silently reusing
+        // whichever Google account is already signed into this browser —
+        // matters on a shared family device where different people need
+        // to switch accounts after signing out.
+        queryParams: { prompt: 'select_account' },
+      },
     })
 
   const signOut = () => supabase.auth.signOut()
