@@ -55,7 +55,7 @@ function App() {
     <div className="min-h-dvh bg-zinc-950 pb-12 text-zinc-100">
       <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-start justify-between gap-3 px-4 py-3">
-          <div className="flex min-w-0 items-start gap-3">
+          <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-orange-500">
               <PlayGlyph className="h-5 w-5 text-white" />
             </div>
@@ -75,7 +75,7 @@ function App() {
           </div>
           <div className="flex shrink-0 flex-col text-right">
             <div className="flex h-6 items-center justify-end">
-              <p className="text-sm font-semibold leading-none text-zinc-100">Hi, {firstName}</p>
+              <p className="text-xl font-bold leading-none tracking-tight text-zinc-100">Hi, {firstName}</p>
             </div>
             <div className="flex h-4 items-center justify-end">
               <p className="text-xs leading-none text-zinc-500">{session.user.email}</p>
@@ -95,7 +95,7 @@ function App() {
       <main className="mx-auto max-w-5xl px-4">
         <div className="mt-4 flex items-start justify-between gap-3">
           <div className="flex flex-col gap-3">
-            <h2 className="pl-2 text-lg font-semibold text-zinc-100">
+            <h2 className="pl-2 py-1.5 text-lg font-semibold leading-5 text-zinc-100">
               Subscriptions ({subscriptions.length})
             </h2>
             <select
