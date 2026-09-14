@@ -19,7 +19,11 @@ function formatStartDate(value: string | null) {
   return value ? formatDate(parseDateOnly(value)) : '—'
 }
 
-const statusLabel = { active: 'Renews', cancelled: 'Cancelled — ends', ended: 'Ended' } as const
+const statusLabel = {
+  active: 'Next payment/renewal',
+  cancelled: 'Cancelled — ends',
+  ended: 'Ended',
+} as const
 const statusClass = {
   active: 'text-slate-500',
   cancelled: 'text-amber-600',
