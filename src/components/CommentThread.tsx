@@ -48,13 +48,13 @@ export function CommentThread({ comments, onAdd, onUpdate, onDelete }: CommentTh
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Add a comment…"
-            className="flex-1 rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none"
+            className="flex-1 rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-orange-500 focus:outline-none"
           />
           <button
             type="button"
             onClick={handleAdd}
             disabled={submitting || !draft.trim()}
-            className="self-end rounded-lg bg-gradient-to-r from-rose-600 to-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:from-rose-500 hover:to-violet-500 disabled:opacity-50"
+            className="self-end rounded-lg bg-gradient-to-r from-red-600 to-orange-500 px-3 py-1.5 text-xs font-medium text-white hover:from-red-500 hover:to-orange-400 disabled:opacity-50"
           >
             Add
           </button>
@@ -95,7 +95,7 @@ function CommentRow({
             rows={2}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            className="flex-1 rounded border border-zinc-700 bg-zinc-900 px-2 py-1 text-xs text-zinc-100 focus:border-violet-500 focus:outline-none"
+            className="flex-1 rounded border border-zinc-700 bg-zinc-900 px-2 py-1 text-xs text-zinc-100 focus:border-orange-500 focus:outline-none"
           />
           <div className="flex flex-col gap-1">
             <button type="button" onClick={handleSave} className="text-zinc-300 underline">
@@ -120,7 +120,7 @@ function CommentRow({
             <button type="button" onClick={() => setEditing(true)} className="hover:text-zinc-200">
               Edit
             </button>
-            <button type="button" onClick={() => onDelete(comment.id)} className="hover:text-rose-400">
+            <button type="button" onClick={() => onDelete(comment.id)} className="hover:text-red-400">
               Delete
             </button>
           </div>

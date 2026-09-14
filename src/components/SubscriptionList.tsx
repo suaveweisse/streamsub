@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { getStatus, formatDate, parseDateOnly } from '../lib/billing'
 import { CommentThread } from './CommentThread'
+import { ChevronIcon } from './icons'
 import type { Subscription, SubscriptionComment } from '../types'
 
 interface SubscriptionListProps {
@@ -51,8 +52,8 @@ export function SubscriptionList({
     subscriptions.find((s) => s.id === sub.parent_subscription_id)?.service_name
 
   return (
-    <div className="mt-4 space-y-6">
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="mt-4 max-w-2xl space-y-6">
+      <div className="space-y-2">
         {current.map((sub) => (
           <SubscriptionCard
             key={sub.id}
@@ -69,7 +70,7 @@ export function SubscriptionList({
           <summary className="cursor-pointer text-sm font-medium text-zinc-500">
             Ended ({ended.length})
           </summary>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-3 space-y-2">
             {ended.map((sub) => (
               <SubscriptionCard
                 key={sub.id}
@@ -105,27 +106,47 @@ function SubscriptionCard({
   onUpdateComment: (id: string, body: string) => Promise<void>
   onDeleteComment: (id: string) => Promise<void>
 }) {
+  const [expanded, setExpanded] = useState(false)
   const [revealPassword, setRevealPassword] = useState(false)
   const status = getStatus(subscription)
   const ended = status.kind === 'ended'
 
+  const cardClass = `rounded-xl border border-zinc-800 bg-zinc-900 shadow-lg shadow-black/20 ${ended ? 'opacity-50' : ''}`
+
+  if (!expanded) {
+    return (
+      <button
+        onClick={() => setExpanded(true)}
+        className={`flex w-full items-center justify-between gap-3 px-4 py-3 text-left ${cardClass}`}
+      >
+        <span className="truncate font-semibold text-zinc-50">{subscription.service_name}</span>
+        <span className="flex shrink-0 items-center gap-2 text-xs text-zinc-500">
+          <span className="max-w-[7rem] truncate">{subscription.account_username || '—'}</span>
+          <span className="font-mono">{subscription.account_password ? '••••••••' : '—'}</span>
+          <ChevronIcon className="h-4 w-4 text-zinc-600" />
+        </span>
+      </button>
+    )
+  }
+
   return (
-    <div
-      className={`rounded-xl border border-zinc-800 bg-zinc-900 p-4 shadow-lg shadow-black/20 ${ended ? 'opacity-50' : ''}`}
-    >
-      <div className="flex items-start justify-between">
+    <div className={`p-4 ${cardClass}`}>
+      <button onClick={() => setExpanded(false)} className="flex w-full items-start justify-between gap-3 text-left">
         <div>
           <h3 className="font-semibold text-zinc-50">{subscription.service_name}</h3>
           <p className="text-sm text-zinc-500">{subscription.payment_source || 'No payment source set'}</p>
-          <p className={`mt-0.5 text-xs text-violet-400 ${parentName ? '' : 'invisible'}`}>
+          <p className={`mt-0.5 text-xs text-orange-400 ${parentName ? '' : 'invisible'}`}>
             Bundled with: {parentName || 'placeholder'}
           </p>
         </div>
-        <div className="text-right">
-          <p className="font-semibold text-zinc-50">{currency.format(subscription.cost)}</p>
-          <p className="text-xs uppercase tracking-wide text-zinc-500">{subscription.billing_cycle}</p>
+        <div className="flex items-center gap-2">
+          <div className="text-right">
+            <p className="font-semibold text-zinc-50">{currency.format(subscription.cost)}</p>
+            <p className="text-xs uppercase tracking-wide text-zinc-500">{subscription.billing_cycle}</p>
+          </div>
+          <ChevronIcon className="h-4 w-4 shrink-0 rotate-90 text-zinc-600" />
         </div>
-      </div>
+      </button>
 
       <dl className="mt-3 space-y-1 text-sm text-zinc-400">
         <Row label="Started">{formatStartDate(subscription.start_date)}</Row>
@@ -158,7 +179,7 @@ function SubscriptionCard({
         </button>
         <button
           onClick={() => onDelete(subscription.id)}
-          className="text-sm font-medium text-rose-500 hover:text-rose-400"
+          className="text-sm font-medium text-red-500 hover:text-red-400"
         >
           Delete
         </button>

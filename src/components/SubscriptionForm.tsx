@@ -208,7 +208,7 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-lg bg-gradient-to-r from-rose-600 to-violet-600 px-4 py-2 text-sm font-medium text-white hover:from-rose-500 hover:to-violet-500 disabled:opacity-50"
+            className="rounded-lg bg-gradient-to-r from-red-600 to-orange-500 px-4 py-2 text-sm font-medium text-white hover:from-red-500 hover:to-orange-400 disabled:opacity-50"
           >
             {submitting ? 'Saving…' : 'Save'}
           </button>
@@ -219,7 +219,7 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
 }
 
 const inputClass =
-  'mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none'
+  'mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-orange-500 focus:outline-none'
 
 function Field({
   label,
