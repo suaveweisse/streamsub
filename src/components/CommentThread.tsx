@@ -32,12 +32,12 @@ export function CommentThread({ comments, onAdd, onUpdate, onDelete }: CommentTh
   }
 
   return (
-    <details className="mt-3 border-t border-slate-100 pt-3">
-      <summary className="cursor-pointer text-xs font-medium text-slate-500">
+    <details className="mt-3 border-t border-zinc-800 pt-2.5">
+      <summary className="cursor-pointer text-xs font-medium text-zinc-500">
         Comments {comments.length > 0 && `(${comments.length})`}
       </summary>
 
-      <div className="mt-3 space-y-3">
+      <div className="mt-2.5 space-y-2.5">
         {comments.map((comment) => (
           <CommentRow key={comment.id} comment={comment} onUpdate={onUpdate} onDelete={onDelete} />
         ))}
@@ -48,13 +48,13 @@ export function CommentThread({ comments, onAdd, onUpdate, onDelete }: CommentTh
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Add a comment…"
-            className="flex-1 rounded-lg border border-slate-300 px-2 py-1.5 text-xs focus:border-slate-500 focus:outline-none"
+            className="flex-1 rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none"
           />
           <button
             type="button"
             onClick={handleAdd}
             disabled={submitting || !draft.trim()}
-            className="self-end rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-700 disabled:opacity-50"
+            className="self-end rounded-lg bg-gradient-to-r from-rose-600 to-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:from-rose-500 hover:to-violet-500 disabled:opacity-50"
           >
             Add
           </button>
@@ -83,8 +83,8 @@ function CommentRow({
   }
 
   return (
-    <div className="rounded-lg bg-slate-50 p-2 text-xs">
-      <div className="flex items-center justify-between text-slate-400">
+    <div className="rounded-lg bg-zinc-950 p-2 text-xs">
+      <div className="flex items-center justify-between text-zinc-500">
         <span>{comment.author_email ?? 'Unknown'}</span>
         <span>{timestampFormat.format(new Date(comment.updated_at))}</span>
       </div>
@@ -95,10 +95,10 @@ function CommentRow({
             rows={2}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            className="flex-1 rounded border border-slate-300 px-2 py-1 text-xs focus:border-slate-500 focus:outline-none"
+            className="flex-1 rounded border border-zinc-700 bg-zinc-900 px-2 py-1 text-xs text-zinc-100 focus:border-violet-500 focus:outline-none"
           />
           <div className="flex flex-col gap-1">
-            <button type="button" onClick={handleSave} className="text-slate-700 underline">
+            <button type="button" onClick={handleSave} className="text-zinc-300 underline">
               Save
             </button>
             <button
@@ -107,7 +107,7 @@ function CommentRow({
                 setDraft(comment.body)
                 setEditing(false)
               }}
-              className="text-slate-400 underline"
+              className="text-zinc-500 underline"
             >
               Cancel
             </button>
@@ -115,12 +115,12 @@ function CommentRow({
         </div>
       ) : (
         <>
-          <p className="mt-1 whitespace-pre-wrap text-slate-700">{comment.body}</p>
-          <div className="mt-1 flex gap-3 text-slate-400">
-            <button type="button" onClick={() => setEditing(true)} className="hover:text-slate-700">
+          <p className="mt-1 whitespace-pre-wrap text-zinc-300">{comment.body}</p>
+          <div className="mt-1 flex gap-3 text-zinc-500">
+            <button type="button" onClick={() => setEditing(true)} className="hover:text-zinc-200">
               Edit
             </button>
-            <button type="button" onClick={() => onDelete(comment.id)} className="hover:text-red-600">
+            <button type="button" onClick={() => onDelete(comment.id)} className="hover:text-rose-400">
               Delete
             </button>
           </div>

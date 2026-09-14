@@ -61,17 +61,17 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
   }
 
   return (
-    <div className="fixed inset-0 z-10 flex items-center justify-center bg-slate-900/40 px-4">
+    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/60 px-4">
       <form
         onSubmit={handleSubmit}
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-lg"
+        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-900 p-5 shadow-xl"
       >
-        <h2 className="text-lg font-semibold text-slate-900">
+        <h2 className="text-lg font-semibold text-zinc-50">
           {initial ? 'Edit subscription' : 'Add subscription'}
         </h2>
 
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          <Field label="Service" className="col-span-2">
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <Field label="Service" className="sm:col-span-2">
             <input
               required
               value={form.service_name}
@@ -81,7 +81,7 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
             />
           </Field>
 
-          <Field label="Paid from" className="col-span-2">
+          <Field label="Paid from" className="sm:col-span-2">
             <input
               value={form.payment_source ?? ''}
               onChange={(e) => setForm({ ...form, payment_source: e.target.value })}
@@ -90,7 +90,7 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
             />
           </Field>
 
-          <Field label="Included via (optional)" className="col-span-2">
+          <Field label="Included via (optional)" className="sm:col-span-2">
             <select
               value={form.parent_subscription_id ?? ''}
               onChange={(e) => setForm({ ...form, parent_subscription_id: e.target.value || null })}
@@ -103,7 +103,7 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-xs font-normal text-slate-400">
+            <p className="mt-1 text-xs font-normal text-zinc-500">
               Use this when a subscription is bundled through another one you track, e.g. Netflix via a
               T-Mobile plan.
             </p>
@@ -111,7 +111,7 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
 
           <Field label="Cost">
             <div className="relative mt-1">
-              <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm text-slate-400">
+              <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm text-zinc-500">
                 $
               </span>
               <input
@@ -155,21 +155,21 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
             />
           </Field>
 
-          <Field label="End date (if cancelled)" className="col-span-2">
+          <Field label="End date (if cancelled)" className="sm:col-span-2">
             <input
               type="date"
               value={form.end_date ?? ''}
               onChange={(e) => setForm({ ...form, end_date: e.target.value })}
               className={inputClass}
             />
-            <p className="mt-1 text-xs font-normal text-slate-400">
+            <p className="mt-1 text-xs font-normal text-zinc-500">
               Leave blank for an active subscription that keeps auto-renewing. Set this to the last day
               it's paid through once you've cancelled — it'll show as active until then, then move to
               ended.
             </p>
           </Field>
 
-          <Field label="Account email" className="col-span-2">
+          <Field label="Account email" className="sm:col-span-2">
             <input
               type="email"
               value={form.account_email ?? ''}
@@ -195,20 +195,20 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
           </Field>
         </div>
 
-        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+        {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
 
-        <div className="mt-6 flex justify-end gap-3">
+        <div className="mt-5 flex justify-end gap-3">
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
+            className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50"
+            className="rounded-lg bg-gradient-to-r from-rose-600 to-violet-600 px-4 py-2 text-sm font-medium text-white hover:from-rose-500 hover:to-violet-500 disabled:opacity-50"
           >
             {submitting ? 'Saving…' : 'Save'}
           </button>
@@ -219,7 +219,7 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
 }
 
 const inputClass =
-  'mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none'
+  'mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none'
 
 function Field({
   label,
@@ -231,7 +231,7 @@ function Field({
   className?: string
 }) {
   return (
-    <label className={`block text-sm font-medium text-slate-700 ${className}`}>
+    <label className={`block text-sm font-medium text-zinc-300 ${className}`}>
       {label}
       {children}
     </label>

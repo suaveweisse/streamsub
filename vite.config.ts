@@ -22,8 +22,8 @@ export default defineConfig({
         name: 'STREAMsub',
         short_name: 'STREAMsub',
         description: 'Track the family’s streaming subscriptions.',
-        theme_color: '#0f172a',
-        background_color: '#f8fafc',
+        theme_color: '#09090b',
+        background_color: '#09090b',
         display: 'standalone',
         start_url: '/',
         icons: [

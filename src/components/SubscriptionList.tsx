@@ -25,9 +25,9 @@ const statusLabel = {
   ended: 'Ended',
 } as const
 const statusClass = {
-  active: 'text-slate-500',
-  cancelled: 'text-amber-600',
-  ended: 'text-slate-400',
+  active: 'text-zinc-400',
+  cancelled: 'text-amber-400',
+  ended: 'text-zinc-600',
 } as const
 
 export function SubscriptionList({
@@ -40,7 +40,7 @@ export function SubscriptionList({
   onDeleteComment,
 }: SubscriptionListProps) {
   if (subscriptions.length === 0) {
-    return <p className="mt-10 text-center text-sm text-slate-500">No subscriptions yet. Add your first one.</p>
+    return <p className="mt-10 text-center text-sm text-zinc-500">No subscriptions yet. Add your first one.</p>
   }
 
   const ended = subscriptions.filter((sub) => getStatus(sub).kind === 'ended')
@@ -51,8 +51,8 @@ export function SubscriptionList({
     subscriptions.find((s) => s.id === sub.parent_subscription_id)?.service_name
 
   return (
-    <div className="mt-6 space-y-8">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="mt-4 space-y-6">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {current.map((sub) => (
           <SubscriptionCard
             key={sub.id}
@@ -66,10 +66,10 @@ export function SubscriptionList({
 
       {ended.length > 0 && (
         <details>
-          <summary className="cursor-pointer text-sm font-medium text-slate-500">
+          <summary className="cursor-pointer text-sm font-medium text-zinc-500">
             Ended ({ended.length})
           </summary>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {ended.map((sub) => (
               <SubscriptionCard
                 key={sub.id}
@@ -110,22 +110,24 @@ function SubscriptionCard({
   const ended = status.kind === 'ended'
 
   return (
-    <div className={`rounded-xl border border-slate-200 bg-white p-5 shadow-sm ${ended ? 'opacity-60' : ''}`}>
+    <div
+      className={`rounded-xl border border-zinc-800 bg-zinc-900 p-4 shadow-lg shadow-black/20 ${ended ? 'opacity-50' : ''}`}
+    >
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-semibold text-slate-900">{subscription.service_name}</h3>
-          <p className="text-sm text-slate-500">{subscription.payment_source || 'No payment source set'}</p>
-          <p className={`mt-0.5 text-xs text-indigo-600 ${parentName ? '' : 'invisible'}`}>
+          <h3 className="font-semibold text-zinc-50">{subscription.service_name}</h3>
+          <p className="text-sm text-zinc-500">{subscription.payment_source || 'No payment source set'}</p>
+          <p className={`mt-0.5 text-xs text-violet-400 ${parentName ? '' : 'invisible'}`}>
             Bundled with: {parentName || 'placeholder'}
           </p>
         </div>
         <div className="text-right">
-          <p className="font-semibold text-slate-900">{currency.format(subscription.cost)}</p>
-          <p className="text-xs uppercase tracking-wide text-slate-400">{subscription.billing_cycle}</p>
+          <p className="font-semibold text-zinc-50">{currency.format(subscription.cost)}</p>
+          <p className="text-xs uppercase tracking-wide text-zinc-500">{subscription.billing_cycle}</p>
         </div>
       </div>
 
-      <dl className="mt-4 space-y-1 text-sm text-slate-600">
+      <dl className="mt-3 space-y-1 text-sm text-zinc-400">
         <Row label="Started">{formatStartDate(subscription.start_date)}</Row>
         <Row label={statusLabel[status.kind]}>
           <span className={statusClass[status.kind]}>{formatDate(status.date)}</span>
@@ -136,7 +138,7 @@ function SubscriptionCard({
           <button
             type="button"
             onClick={() => setRevealPassword((v) => !v)}
-            className="font-mono text-slate-700 underline decoration-dotted"
+            className="font-mono text-zinc-300 underline decoration-dotted"
           >
             {subscription.account_password
               ? revealPassword
@@ -147,16 +149,16 @@ function SubscriptionCard({
         </Row>
       </dl>
 
-      <div className="mt-4 flex justify-end gap-3 border-t border-slate-100 pt-3">
+      <div className="mt-3 flex justify-end gap-3 border-t border-zinc-800 pt-2.5">
         <button
           onClick={() => onEdit(subscription)}
-          className="text-sm font-medium text-slate-600 hover:text-slate-900"
+          className="text-sm font-medium text-zinc-400 hover:text-zinc-50"
         >
           Edit
         </button>
         <button
           onClick={() => onDelete(subscription.id)}
-          className="text-sm font-medium text-red-500 hover:text-red-700"
+          className="text-sm font-medium text-rose-500 hover:text-rose-400"
         >
           Delete
         </button>
@@ -175,7 +177,7 @@ function SubscriptionCard({
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex justify-between gap-3">
-      <dt className="text-slate-400">{label}</dt>
+      <dt className="text-zinc-500">{label}</dt>
       <dd className="text-right">{children}</dd>
     </div>
   )
