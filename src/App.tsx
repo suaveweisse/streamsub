@@ -59,64 +59,77 @@ function App() {
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-orange-500">
               <PlayGlyph className="h-5 w-5 text-white" />
             </div>
-            <div className="flex min-w-0 flex-col gap-0.5">
-              <h1 className="text-xl font-bold leading-none tracking-tight">
-                STREAM<span className="text-zinc-400">sub</span>
-              </h1>
-              <p className="text-xs leading-none text-zinc-500">
-                Streaming Subscription
-                <br />
-                Management
-              </p>
+            <div className="flex min-w-0 flex-col">
+              <div className="flex h-6 items-center">
+                <h1 className="text-xl font-bold leading-none tracking-tight">
+                  STREAM<span className="text-zinc-400">sub</span>
+                </h1>
+              </div>
+              <div className="flex h-4 items-center">
+                <p className="text-xs leading-none text-zinc-500">Streaming Subscription</p>
+              </div>
+              <div className="flex h-4 items-center">
+                <p className="text-xs leading-none text-zinc-500">Management</p>
+              </div>
             </div>
           </div>
-          <div className="flex shrink-0 flex-col gap-0.5 text-right">
-            <p className="text-sm font-medium leading-none text-zinc-100">Hi, {firstName}</p>
-            <p className="text-xs leading-none text-zinc-500">{session.user.email}</p>
-            <button
-              onClick={signOut}
-              className="text-right text-xs font-medium leading-none text-zinc-500 hover:text-zinc-100"
-            >
-              Sign out
-            </button>
+          <div className="flex shrink-0 flex-col text-right">
+            <div className="flex h-6 items-center justify-end">
+              <p className="text-sm font-semibold leading-none text-zinc-100">Hi, {firstName}</p>
+            </div>
+            <div className="flex h-4 items-center justify-end">
+              <p className="text-xs leading-none text-zinc-500">{session.user.email}</p>
+            </div>
+            <div className="flex h-4 items-center justify-end">
+              <button
+                onClick={signOut}
+                className="text-right text-xs font-medium leading-none text-zinc-500 hover:text-zinc-100"
+              >
+                Sign out
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-5xl px-4">
-        <div className="mt-4 flex items-center justify-between">
-          <h2 className="pl-2 text-xl font-semibold text-zinc-100">Subscriptions ({subscriptions.length})</h2>
-          <button
-            onClick={() => setEditing('new')}
-            className="rounded-lg bg-gradient-to-r from-red-600 to-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:from-red-500 hover:to-orange-400"
-          >
-            Add subscription
-          </button>
-        </div>
+        <div className="mt-4 flex items-start justify-between gap-3">
+          <div className="flex flex-col gap-3">
+            <h2 className="pl-2 text-lg font-semibold text-zinc-100">
+              Subscriptions ({subscriptions.length})
+            </h2>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
+              className="rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-300 focus:border-orange-500 focus:outline-none"
+            >
+              <option value="upcoming">Sort: Upcoming renewal</option>
+              <option value="name">Sort: Name (A–Z)</option>
+              <option value="cost">Sort: Cost (high to low)</option>
+            </select>
+          </div>
 
-        <div className="mt-3 flex items-center justify-between gap-2">
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-300 focus:border-orange-500 focus:outline-none"
-          >
-            <option value="upcoming">Sort: Upcoming renewal</option>
-            <option value="name">Sort: Name (A–Z)</option>
-            <option value="cost">Sort: Cost (high to low)</option>
-          </select>
+          <div className="flex flex-col items-stretch gap-3">
+            <button
+              onClick={() => setEditing('new')}
+              className="rounded-lg bg-gradient-to-r from-red-600 to-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:from-red-500 hover:to-orange-400"
+            >
+              Add subscription
+            </button>
 
-          <div className="flex overflow-hidden rounded-lg border border-zinc-800 text-sm">
-            {(['list', 'cards'] as const).map((mode) => (
-              <button
-                key={mode}
-                onClick={() => setViewMode(mode)}
-                className={`px-4 py-1.5 font-medium capitalize ${
-                  viewMode === mode ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-500 hover:text-zinc-200'
-                }`}
-              >
-                {mode}
-              </button>
-            ))}
+            <div className="flex overflow-hidden rounded-lg border border-zinc-800 text-sm">
+              {(['list', 'cards'] as const).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setViewMode(mode)}
+                  className={`flex-1 px-4 py-1.5 font-medium capitalize ${
+                    viewMode === mode ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-500 hover:text-zinc-200'
+                  }`}
+                >
+                  {mode}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
