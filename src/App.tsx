@@ -56,8 +56,8 @@ function App() {
       <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-start justify-between gap-3 px-4 py-3">
           <div className="flex min-w-0 items-start gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-orange-500">
-              <PlayGlyph className="h-6 w-6 text-white" />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-orange-500">
+              <PlayGlyph className="h-5 w-5 text-white" />
             </div>
             <div className="flex min-w-0 flex-col gap-0.5">
               <h1 className="text-xl font-bold leading-none tracking-tight">
@@ -71,7 +71,7 @@ function App() {
             <p className="text-xs leading-none text-zinc-500">{session.user.email}</p>
             <button
               onClick={signOut}
-              className="text-xs font-medium leading-none text-zinc-500 hover:text-zinc-100"
+              className="text-right text-xs font-medium leading-none text-zinc-500 hover:text-zinc-100"
             >
               Sign out
             </button>
@@ -81,9 +81,7 @@ function App() {
 
       <main className="mx-auto max-w-5xl px-4">
         <div className="mt-4 flex items-center justify-between">
-          <p className="pl-1 text-sm font-medium text-zinc-400">
-            {subscriptions.length} subscription{subscriptions.length === 1 ? '' : 's'} tracked
-          </p>
+          <h2 className="text-lg font-semibold text-zinc-100">Subscriptions ({subscriptions.length})</h2>
           <button
             onClick={() => setEditing('new')}
             className="rounded-lg bg-gradient-to-r from-red-600 to-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:from-red-500 hover:to-orange-400"
