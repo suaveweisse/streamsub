@@ -59,10 +59,9 @@ export function SubscriptionList({
     subscriptions.find((s) => s.id === sub.parent_subscription_id)?.service_name
 
   const groupClass = viewMode === 'cards' ? 'grid gap-3 sm:grid-cols-2 lg:grid-cols-3' : 'space-y-2'
-  const containerClass = viewMode === 'cards' ? '' : 'max-w-2xl'
 
   return (
-    <div className={`mt-4 space-y-6 ${containerClass}`}>
+    <div className="mt-4 space-y-6">
       <div className={groupClass}>
         {current.map((sub) => (
           <SubscriptionCard
