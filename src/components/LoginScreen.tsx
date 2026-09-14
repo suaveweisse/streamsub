@@ -6,7 +6,7 @@ interface LoginScreenProps {
 
 export function LoginScreen({ onSignIn }: LoginScreenProps) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-950 px-4">
+    <div className="flex min-h-dvh items-center justify-center bg-zinc-950 px-4">
       <div className="w-full max-w-sm rounded-xl border border-zinc-800 bg-zinc-900 p-8 text-center shadow-lg">
         <h1 className="flex items-center justify-center gap-1.5 text-2xl font-bold tracking-tight text-zinc-100">
           <PlayIcon className="h-5 w-5" />

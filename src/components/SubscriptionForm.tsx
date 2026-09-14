@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { ChevronIcon } from './icons'
 import type { BillingCycle, Subscription, SubscriptionInput } from '../types'
 
@@ -43,6 +43,11 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
     const email = form.account_email?.trim() ?? ''
     if (email && !emailPattern.test(email)) {
       setError('Please enter a valid account email address.')
+      return
+    }
+
+    if (!form.start_date) {
+      setError('Please enter a valid start date (MM/DD/YYYY).')
       return
     }
 
@@ -140,27 +145,17 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
             </Select>
           </Field>
 
-          <Field label="Start date" className="col-span-2">
-            <input
-              required
-              type="date"
-              value={form.start_date ?? ''}
-              onChange={(e) => setForm({ ...form, start_date: e.target.value })}
-              className={dateInputClass}
-            />
+          <Field label="Start date">
+            <DateField value={form.start_date ?? ''} onChange={(value) => setForm({ ...form, start_date: value })} />
           </Field>
 
-          <Field label="End date" className="col-span-2">
-            <input
-              type="date"
-              value={form.end_date ?? ''}
-              onChange={(e) => setForm({ ...form, end_date: e.target.value })}
-              className={dateInputClass}
-            />
-            <p className="mt-1 text-xs font-normal text-zinc-500">
-              Leave blank while active; set it to the last paid-through day once cancelled.
-            </p>
+          <Field label="End date">
+            <DateField value={form.end_date ?? ''} onChange={(value) => setForm({ ...form, end_date: value })} />
           </Field>
+
+          <p className="col-span-2 -mt-1 text-xs text-zinc-500">
+            Leave end date blank while active; set it to the last paid-through day once cancelled.
+          </p>
 
           <Field label="Account email" className="col-span-2">
             <input
@@ -214,13 +209,6 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
 const inputClass =
   'mt-1 w-full min-w-0 rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-orange-500 focus:outline-none'
 
-// Safari has a known bug where a dark color-scheme breaks a native
-// date input's internal rendering (the segment text and calendar icon
-// go invisible, and the control's paint area can overflow its own box).
-// Forcing light rendering just for these two fields sidesteps it —
-// browsers' best-tested path for native date controls is light mode.
-const dateInputClass = `${inputClass} border-zinc-300 bg-zinc-100 text-zinc-900 [color-scheme:light]`
-
 function Field({
   label,
   children,
@@ -260,5 +248,60 @@ function Select({
         <ChevronIcon className="h-4 w-4 rotate-90 text-zinc-500" />
       </span>
     </div>
+  )
+}
+
+function isoToDisplay(iso: string): string {
+  const [year, month, day] = iso.split('-')
+  if (!year || !month || !day) return ''
+  return `${month}/${day}/${year}`
+}
+
+/** Parses "MM/DD/YYYY" to an ISO "YYYY-MM-DD" string, or null if incomplete/invalid. */
+function displayToISO(display: string): string | null {
+  const match = display.match(/^(\d{2})\/(\d{2})\/(\d{4})$/)
+  if (!match) return null
+  const [, mm, dd, yyyy] = match
+  const month = Number(mm)
+  const day = Number(dd)
+  const year = Number(yyyy)
+  const date = new Date(year, month - 1, day)
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null
+  return `${yyyy}-${mm}-${dd}`
+}
+
+// A plain masked text field standing in for <input type="date">, which has
+// a real WebKit bug (affecting every iOS browser, since Apple requires them
+// all to use WebKit): a dark color-scheme can make the native control's
+// segment text and calendar icon render invisible while its paint area
+// still overflows its box. A custom field sidesteps native date-control
+// rendering entirely rather than continuing to chase that bug.
+function DateField({ value, onChange }: { value: string; onChange: (isoValue: string) => void }) {
+  const [text, setText] = useState(isoToDisplay(value))
+
+  useEffect(() => setText(isoToDisplay(value)), [value])
+
+  const handleChange = (raw: string) => {
+    const digits = raw.replace(/\D/g, '').slice(0, 8)
+    let formatted = digits
+    if (digits.length > 4) formatted = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`
+    else if (digits.length > 2) formatted = `${digits.slice(0, 2)}/${digits.slice(2)}`
+    setText(formatted)
+
+    const iso = displayToISO(formatted)
+    if (iso) onChange(iso)
+    else if (formatted === '') onChange('')
+  }
+
+  return (
+    <input
+      type="text"
+      inputMode="numeric"
+      placeholder="MM/DD/YYYY"
+      value={text}
+      onChange={(e) => handleChange(e.target.value)}
+      onBlur={() => setText(isoToDisplay(value))}
+      className={inputClass}
+    />
   )
 }

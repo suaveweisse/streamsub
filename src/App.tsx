@@ -52,26 +52,26 @@ function App() {
   const firstName = firstNameOf(session.user)
 
   return (
-    <div className="min-h-screen bg-zinc-950 pb-12 text-zinc-100">
+    <div className="min-h-dvh bg-zinc-950 pb-12 text-zinc-100">
       <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-orange-500">
               <PlayGlyph className="h-6 w-6 text-white" />
             </div>
-            <div className="min-w-0">
-              <h1 className="text-xl font-bold tracking-tight">
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <h1 className="text-xl font-bold leading-none tracking-tight">
                 STREAM<span className="text-zinc-400">sub</span>
               </h1>
-              <p className="text-xs text-zinc-500">Streaming Subscription Management</p>
+              <p className="text-xs leading-none text-zinc-500">Streaming Subscription Management</p>
             </div>
           </div>
-          <div className="shrink-0 text-right leading-tight">
-            <p className="text-sm font-medium text-zinc-100">Hi, {firstName}</p>
-            <p className="text-xs text-zinc-500">{session.user.email}</p>
+          <div className="flex shrink-0 flex-col gap-0.5 text-right">
+            <p className="text-sm font-medium leading-none text-zinc-100">Hi, {firstName}</p>
+            <p className="text-xs leading-none text-zinc-500">{session.user.email}</p>
             <button
               onClick={signOut}
-              className="mt-0.5 text-xs font-medium text-zinc-500 hover:text-zinc-100"
+              className="text-xs font-medium leading-none text-zinc-500 hover:text-zinc-100"
             >
               Sign out
             </button>
@@ -81,7 +81,7 @@ function App() {
 
       <main className="mx-auto max-w-5xl px-4">
         <div className="mt-4 flex items-center justify-between">
-          <p className="pl-1 text-base font-medium text-zinc-300">
+          <p className="pl-1 text-xs font-medium uppercase tracking-wide text-zinc-500">
             {subscriptions.length} subscription{subscriptions.length === 1 ? '' : 's'} tracked
           </p>
           <button
