@@ -25,6 +25,7 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }: SubscriptionFormProps) {
   const [form, setForm] = useState<SubscriptionInput>(initial ?? emptyForm)
+  const [costText, setCostText] = useState((initial?.cost ?? 0).toFixed(2))
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -115,11 +116,16 @@ export function SubscriptionForm({ initial, subscriptions, onCancel, onSubmit }:
               </span>
               <input
                 required
-                type="number"
-                step="0.01"
-                min="0"
-                value={form.cost}
-                onChange={(e) => setForm({ ...form, cost: Number(e.target.value) })}
+                type="text"
+                inputMode="decimal"
+                value={costText}
+                onChange={(e) => {
+                  const raw = e.target.value
+                  if (!/^\d*\.?\d{0,2}$/.test(raw)) return
+                  setCostText(raw)
+                  setForm({ ...form, cost: raw === '' || raw === '.' ? 0 : Number(raw) })
+                }}
+                onBlur={() => setCostText(form.cost.toFixed(2))}
                 className={`${inputClass} !mt-0 pl-6`}
               />
             </div>

@@ -111,7 +111,9 @@ function SubscriptionCard({
         <div>
           <h3 className="font-semibold text-slate-900">{subscription.service_name}</h3>
           <p className="text-sm text-slate-500">{subscription.payment_source || 'No payment source set'}</p>
-          {parentName && <p className="mt-0.5 text-xs text-indigo-600">Bundled with: {parentName}</p>}
+          <p className={`mt-0.5 text-xs text-indigo-600 ${parentName ? '' : 'invisible'}`}>
+            Bundled with: {parentName || 'placeholder'}
+          </p>
         </div>
         <div className="text-right">
           <p className="font-semibold text-slate-900">{currency.format(subscription.cost)}</p>
