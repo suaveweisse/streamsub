@@ -1,4 +1,4 @@
-import type { BillingCycle } from '../types'
+import type { BillingCycle, Subscription } from '../types'
 
 export function parseDateOnly(value: string): Date {
   const [year, month, day] = value.split('-').map(Number)
@@ -79,4 +79,28 @@ export function getStatus(
 
 function todayISO(date: Date): string {
   return startOfUTCDay(date).toISOString().slice(0, 10)
+}
+
+export type SortOption = 'upcoming' | 'name' | 'cost'
+
+const statusRank = { active: 0, cancelled: 0, ended: 1 } as const
+
+export function sortSubscriptions(subscriptions: Subscription[], sortBy: SortOption): Subscription[] {
+  const list = [...subscriptions]
+  switch (sortBy) {
+    case 'name':
+      return list.sort((a, b) => a.service_name.localeCompare(b.service_name))
+    case 'cost':
+      return list.sort((a, b) => b.cost - a.cost)
+    case 'upcoming':
+    default:
+      return list.sort((a, b) => {
+        const statusA = getStatus(a)
+        const statusB = getStatus(b)
+        if (statusRank[statusA.kind] !== statusRank[statusB.kind]) {
+          return statusRank[statusA.kind] - statusRank[statusB.kind]
+        }
+        return statusA.date.getTime() - statusB.date.getTime()
+      })
+  }
 }

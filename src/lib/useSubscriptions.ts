@@ -1,15 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from './supabase'
-import { getStatus } from './billing'
+import { sortSubscriptions } from './billing'
 import type { Subscription, SubscriptionInput } from '../types'
-
-function byUpcomingDate(a: Subscription, b: Subscription) {
-  const rank = { active: 0, cancelled: 0, ended: 1 }
-  const statusA = getStatus(a)
-  const statusB = getStatus(b)
-  if (rank[statusA.kind] !== rank[statusB.kind]) return rank[statusA.kind] - rank[statusB.kind]
-  return statusA.date.getTime() - statusB.date.getTime()
-}
 
 export function useSubscriptions() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -21,7 +13,7 @@ export function useSubscriptions() {
     const { data, error } = await supabase.from('subscriptions').select('*')
 
     if (error) setError(error.message)
-    else setSubscriptions([...data].sort(byUpcomingDate))
+    else setSubscriptions(sortSubscriptions(data, 'upcoming'))
     setLoading(false)
   }, [])
 
