@@ -54,8 +54,8 @@ function App() {
   return (
     <div className="min-h-dvh bg-zinc-950 pb-12 text-zinc-100">
       <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
-          <div className="flex min-w-0 items-center gap-3">
+        <div className="mx-auto flex max-w-5xl items-start justify-between gap-3 px-4 py-3">
+          <div className="flex min-w-0 items-start gap-3">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-orange-500">
               <PlayGlyph className="h-6 w-6 text-white" />
             </div>
@@ -81,7 +81,7 @@ function App() {
 
       <main className="mx-auto max-w-5xl px-4">
         <div className="mt-4 flex items-center justify-between">
-          <p className="pl-1 text-xs font-medium uppercase tracking-wide text-zinc-500">
+          <p className="pl-1 text-sm font-medium text-zinc-400">
             {subscriptions.length} subscription{subscriptions.length === 1 ? '' : 's'} tracked
           </p>
           <button
