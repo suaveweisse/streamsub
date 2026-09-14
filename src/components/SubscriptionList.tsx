@@ -9,6 +9,7 @@ export type ViewMode = 'list' | 'cards'
 interface SubscriptionListProps {
   subscriptions: Subscription[]
   comments: SubscriptionComment[]
+  currentUserId: string | null
   viewMode: ViewMode
   sortBy: SortOption
   onEdit: (subscription: Subscription) => void
@@ -38,6 +39,7 @@ const statusClass = {
 export function SubscriptionList({
   subscriptions,
   comments,
+  currentUserId,
   viewMode,
   sortBy,
   onEdit,
@@ -54,7 +56,7 @@ export function SubscriptionList({
   const ended = sorted.filter((sub) => getStatus(sub).kind === 'ended')
   const current = sorted.filter((sub) => getStatus(sub).kind !== 'ended')
 
-  const cardProps = { onEdit, onDelete, onAddComment, onUpdateComment, onDeleteComment, viewMode }
+  const cardProps = { onEdit, onDelete, onAddComment, onUpdateComment, onDeleteComment, viewMode, currentUserId }
   const parentName = (sub: Subscription) =>
     subscriptions.find((s) => s.id === sub.parent_subscription_id)?.service_name
 
@@ -100,6 +102,7 @@ function SubscriptionCard({
   subscription,
   parentName,
   comments,
+  currentUserId,
   viewMode,
   onEdit,
   onDelete,
@@ -110,6 +113,7 @@ function SubscriptionCard({
   subscription: Subscription
   parentName?: string
   comments: SubscriptionComment[]
+  currentUserId: string | null
   viewMode: ViewMode
   onEdit: (subscription: Subscription) => void
   onDelete: (id: string) => void
@@ -222,6 +226,7 @@ function SubscriptionCard({
 
       <CommentThread
         comments={comments}
+        currentUserId={currentUserId}
         onAdd={(body) => onAddComment(subscription.id, body)}
         onUpdate={onUpdateComment}
         onDelete={onDeleteComment}

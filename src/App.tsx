@@ -140,6 +140,7 @@ function App() {
           <SubscriptionList
             subscriptions={subscriptions}
             comments={comments}
+            currentUserId={session.user.id}
             viewMode={viewMode}
             sortBy={sortBy}
             onEdit={(sub) => setEditing(sub)}

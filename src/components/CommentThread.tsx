@@ -11,12 +11,13 @@ const timestampFormat = new Intl.DateTimeFormat('en-US', {
 
 interface CommentThreadProps {
   comments: SubscriptionComment[]
+  currentUserId: string | null
   onAdd: (body: string) => Promise<void>
   onUpdate: (id: string, body: string) => Promise<void>
   onDelete: (id: string) => Promise<void>
 }
 
-export function CommentThread({ comments, onAdd, onUpdate, onDelete }: CommentThreadProps) {
+export function CommentThread({ comments, currentUserId, onAdd, onUpdate, onDelete }: CommentThreadProps) {
   const [draft, setDraft] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -39,7 +40,13 @@ export function CommentThread({ comments, onAdd, onUpdate, onDelete }: CommentTh
 
       <div className="mt-2.5 space-y-2.5">
         {comments.map((comment) => (
-          <CommentRow key={comment.id} comment={comment} onUpdate={onUpdate} onDelete={onDelete} />
+          <CommentRow
+            key={comment.id}
+            comment={comment}
+            canModify={comment.author_id === currentUserId}
+            onUpdate={onUpdate}
+            onDelete={onDelete}
+          />
         ))}
 
         <div className="flex gap-2">
@@ -66,10 +73,12 @@ export function CommentThread({ comments, onAdd, onUpdate, onDelete }: CommentTh
 
 function CommentRow({
   comment,
+  canModify,
   onUpdate,
   onDelete,
 }: {
   comment: SubscriptionComment
+  canModify: boolean
   onUpdate: (id: string, body: string) => Promise<void>
   onDelete: (id: string) => Promise<void>
 }) {
@@ -116,14 +125,22 @@ function CommentRow({
       ) : (
         <>
           <p className="mt-1 whitespace-pre-wrap text-zinc-300">{comment.body}</p>
-          <div className="mt-1 flex gap-3 text-zinc-500">
-            <button type="button" onClick={() => setEditing(true)} className="hover:text-zinc-200">
-              Edit
-            </button>
-            <button type="button" onClick={() => onDelete(comment.id)} className="hover:text-red-400">
-              Delete
-            </button>
-          </div>
+          {canModify && (
+            <div className="mt-1 flex gap-3 text-zinc-500">
+              <button type="button" onClick={() => setEditing(true)} className="hover:text-zinc-200">
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (confirm('Delete this comment?')) onDelete(comment.id)
+                }}
+                className="hover:text-red-400"
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
