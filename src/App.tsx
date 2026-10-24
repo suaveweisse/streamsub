@@ -106,6 +106,7 @@ function App() {
               <option value="upcoming">Sort: Upcoming renewal</option>
               <option value="name">Sort: Name (A–Z)</option>
               <option value="cost">Sort: Cost (high to low)</option>
+              <option value="parent">Sort: Bundled (parent → child)</option>
             </select>
           </div>
 

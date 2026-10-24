@@ -139,11 +139,14 @@ function SubscriptionCard({
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') setExpanded(true)
         }}
-        className={`flex w-full cursor-pointer items-center justify-between gap-3 px-3 py-2 text-left ${cardClass}`}
+        className={`flex w-full cursor-pointer flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2 text-left ${cardClass}`}
       >
-        <span className="truncate font-semibold text-zinc-50">{subscription.service_name}</span>
+        <span className="flex items-center gap-1.5">
+          {parentName && <span className="shrink-0 text-sm text-zinc-600">↳</span>}
+          <span className="font-semibold text-zinc-50">{subscription.service_name}</span>
+        </span>
         <span className="flex shrink-0 items-center gap-2 text-xs text-zinc-500">
-          <span className="max-w-[6rem] truncate">{subscription.account_username || '—'}</span>
+          <span>{subscription.account_username || '—'}</span>
           <button
             type="button"
             onClick={(e) => {

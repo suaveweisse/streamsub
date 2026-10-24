@@ -81,7 +81,7 @@ function todayISO(date: Date): string {
   return startOfUTCDay(date).toISOString().slice(0, 10)
 }
 
-export type SortOption = 'upcoming' | 'name' | 'cost'
+export type SortOption = 'upcoming' | 'name' | 'cost' | 'parent'
 
 const statusRank = { active: 0, cancelled: 0, ended: 1 } as const
 
@@ -92,6 +92,23 @@ export function sortSubscriptions(subscriptions: Subscription[], sortBy: SortOpt
       return list.sort((a, b) => a.service_name.localeCompare(b.service_name))
     case 'cost':
       return list.sort((a, b) => b.cost - a.cost)
+    case 'parent': {
+      // Group each subscription under its top-level parent's name (or its
+      // own name, if it has no parent), sorted alphabetically; within a
+      // group the parent itself comes first, then its children A-Z.
+      const byId = new Map(list.map((sub) => [sub.id, sub]))
+      const parentOf = (sub: Subscription) =>
+        sub.parent_subscription_id ? byId.get(sub.parent_subscription_id) : undefined
+      const groupKey = (sub: Subscription) => (parentOf(sub) ?? sub).service_name
+      return list.sort((a, b) => {
+        const groupCompare = groupKey(a).localeCompare(groupKey(b))
+        if (groupCompare !== 0) return groupCompare
+        const aIsChild = Boolean(parentOf(a))
+        const bIsChild = Boolean(parentOf(b))
+        if (aIsChild !== bIsChild) return aIsChild ? 1 : -1
+        return a.service_name.localeCompare(b.service_name)
+      })
+    }
     case 'upcoming':
     default:
       return list.sort((a, b) => {
