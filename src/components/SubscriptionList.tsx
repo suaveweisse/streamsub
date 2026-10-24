@@ -56,7 +56,7 @@ export function SubscriptionList({
   const ended = sorted.filter((sub) => getStatus(sub).kind === 'ended')
   const current = sorted.filter((sub) => getStatus(sub).kind !== 'ended')
 
-  const cardProps = { onEdit, onDelete, onAddComment, onUpdateComment, onDeleteComment, viewMode, currentUserId }
+  const cardProps = { onEdit, onDelete, onAddComment, onUpdateComment, onDeleteComment, viewMode, currentUserId, sortBy }
   const parentName = (sub: Subscription) =>
     subscriptions.find((s) => s.id === sub.parent_subscription_id)?.service_name
 
@@ -104,6 +104,7 @@ function SubscriptionCard({
   comments,
   currentUserId,
   viewMode,
+  sortBy,
   onEdit,
   onDelete,
   onAddComment,
@@ -115,6 +116,7 @@ function SubscriptionCard({
   comments: SubscriptionComment[]
   currentUserId: string | null
   viewMode: ViewMode
+  sortBy: SortOption
   onEdit: (subscription: Subscription) => void
   onDelete: (id: string) => void
   onAddComment: (subscriptionId: string, body: string) => Promise<void>
@@ -129,6 +131,7 @@ function SubscriptionCard({
 
   const cardClass = `rounded-xl border border-zinc-800 bg-zinc-900 shadow-lg shadow-black/20 ${ended ? 'opacity-50' : ''}`
   const maskedPassword = subscription.account_password ? (revealPassword ? subscription.account_password : '••••••••') : '—'
+  const showBundleMarker = Boolean(parentName) && sortBy === 'parent'
 
   if (collapsible && !expanded) {
     return (
@@ -142,7 +145,7 @@ function SubscriptionCard({
         className={`flex w-full cursor-pointer flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2 text-left ${cardClass}`}
       >
         <span className="flex items-center gap-1.5">
-          {parentName && <span className="shrink-0 text-sm text-zinc-600">↳</span>}
+          {showBundleMarker && <span className="shrink-0 text-sm text-zinc-600">↳</span>}
           <span className="font-semibold text-zinc-50">{subscription.service_name}</span>
         </span>
         <span className="flex shrink-0 items-center gap-2 text-xs text-zinc-500">

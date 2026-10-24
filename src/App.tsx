@@ -41,7 +41,7 @@ function App() {
   const { comments, addComment, updateComment, deleteComment } = useComments()
   const [editing, setEditing] = useState<Subscription | 'new' | null>(null)
   const [viewMode, setViewMode] = usePersistedState<ViewMode>('streamsub-view-mode', 'list')
-  const [sortBy, setSortBy] = usePersistedState<SortOption>('streamsub-sort', 'upcoming')
+  const [sortBy, setSortBy] = usePersistedState<SortOption>('streamsub-sort', 'parent')
 
   if (authLoading) return null
 
